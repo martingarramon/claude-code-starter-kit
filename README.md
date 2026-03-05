@@ -42,6 +42,7 @@ Claude Code reads instructions from three layers. This kit gives you a working v
 graph TD
     A["CLAUDE.md<br/><i>Constitution — runs every turn</i>"] --> B["Skills/<br/><i>Specialist workflows — activate on demand</i>"]
     A --> C["Memory/<br/><i>Persistent state — survives across sessions</i>"]
+    A --> L["Examples/<br/><i>Working templates and code</i>"]
     B --> D["research/"]
     B --> E["debugging/"]
     B --> F["code-review/"]
@@ -50,10 +51,14 @@ graph TD
     B --> I["tool-integration/"]
     B --> J["proposal-writing/"]
     C --> K["MEMORY.md<br/><i>Status, decisions, patterns</i>"]
+    L --> M["mcp-server/"]
+    L --> N["claude-md-templates/"]
+    L --> O["hooks/"]
 
     style A fill:#1a1a2e,stroke:#e94560,color:#fff
     style B fill:#1a1a2e,stroke:#0f3460,color:#fff
     style C fill:#1a1a2e,stroke:#0f3460,color:#fff
+    style L fill:#1a1a2e,stroke:#0f3460,color:#fff
 ```
 
 ```
@@ -71,6 +76,10 @@ your-project/
     proposal-writing/SKILL.md        # Client proposals and project pitches
   .claude/
     settings.json                    # Permission configuration
+  examples/
+    mcp-server/                      # Working MCP server (project notes store)
+    claude-md-templates/             # CLAUDE.md for SaaS, Python API, and more
+    hooks/                           # Session-start and post-tool-use hook examples
 ```
 
 **CLAUDE.md** tells Claude *how to behave*. It runs every turn, so keep it tight -- rules, not essays. This template includes MCP usage protocols, memory management rules, self-review loops, and context window hygiene -- all extracted from production use.
@@ -109,6 +118,18 @@ The template includes rules that changed real behavior in production:
 Sections for project status, key decisions, patterns learned, and frequently used commands. Claude updates this during sessions and reads it at the start of the next one.
 
 The template includes guidance on what to store (decisions that would be expensive to re-research) and what not to store (anything that belongs in code comments).
+
+### Examples
+
+Ready-to-use starting points:
+
+| Example | What It Is |
+|---------|-----------|
+| `examples/mcp-server/` | Minimal working MCP server in Python. Gives Claude persistent read/write access to a local notes store. Use as a template for your own MCP servers. |
+| `examples/claude-md-templates/saas-webapp.md` | CLAUDE.md for Next.js + Prisma + PostgreSQL projects. Rules for migrations, TypeScript strictness, and server component defaults. |
+| `examples/claude-md-templates/python-api.md` | CLAUDE.md for FastAPI + SQLAlchemy projects. Rules for async correctness, Alembic migrations, and dependency injection. |
+| `examples/hooks/session-start.sh` | Shell hook that runs at session start: shows git status and reminds Claude to read memory. |
+| `examples/hooks/post-tool-use.sh` | Shell hook that logs tool errors to `.claude/error-log.txt` for review. |
 
 ---
 
