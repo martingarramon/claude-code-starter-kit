@@ -38,21 +38,42 @@ Or just copy the files manually -- there is no magic here, only structure.
 
 Claude Code reads instructions from three layers. This kit gives you a working version of each.
 
-```
-your-project/
-  CLAUDE.md              # The constitution -- runs every turn
-  memory/
-    MEMORY.md            # Persistent brain -- decisions, status, patterns
-  skills/
-    research/SKILL.md    # Activates for multi-source research tasks
-    debugging/SKILL.md   # Activates when anything breaks
-    proposal-writing/    # Activates for client proposals and pitches
-      SKILL.md
-  .claude/
-    settings.json        # Permission configuration
+```mermaid
+graph TD
+    A["CLAUDE.md<br/><i>Constitution — runs every turn</i>"] --> B["Skills/<br/><i>Specialist workflows — activate on demand</i>"]
+    A --> C["Memory/<br/><i>Persistent state — survives across sessions</i>"]
+    B --> D["research/"]
+    B --> E["debugging/"]
+    B --> F["code-review/"]
+    B --> G["architecture-decision/"]
+    B --> H["context-management/"]
+    B --> I["tool-integration/"]
+    B --> J["proposal-writing/"]
+    C --> K["MEMORY.md<br/><i>Status, decisions, patterns</i>"]
+
+    style A fill:#1a1a2e,stroke:#e94560,color:#fff
+    style B fill:#1a1a2e,stroke:#0f3460,color:#fff
+    style C fill:#1a1a2e,stroke:#0f3460,color:#fff
 ```
 
-**CLAUDE.md** tells Claude *how to behave*. It runs every turn, so keep it tight -- rules, not essays.
+```
+your-project/
+  CLAUDE.md                          # The constitution -- runs every turn
+  memory/
+    MEMORY.md                        # Persistent brain -- decisions, status, patterns
+  skills/
+    research/SKILL.md                # Multi-source research with recommendations
+    debugging/SKILL.md               # Systematic root-cause analysis
+    code-review/SKILL.md             # Security, quality, maintainability review
+    architecture-decision/SKILL.md   # ADR process for technical choices
+    context-management/SKILL.md      # Context window hygiene and memory updates
+    tool-integration/SKILL.md        # MCP servers and external API connections
+    proposal-writing/SKILL.md        # Client proposals and project pitches
+  .claude/
+    settings.json                    # Permission configuration
+```
+
+**CLAUDE.md** tells Claude *how to behave*. It runs every turn, so keep it tight -- rules, not essays. This template includes MCP usage protocols, memory management rules, self-review loops, and context window hygiene -- all extracted from production use.
 
 **Skills** tell Claude *how to do specific jobs*. They only activate when relevant, so they can be detailed without bloating every interaction.
 
@@ -77,6 +98,10 @@ The template includes rules that changed real behavior in production:
 |-------|-------------|
 | **Research** | Decomposes questions into sub-queries, researches in parallel, synthesizes with confidence levels, and forms a specific recommendation -- not "it depends" |
 | **Debugging** | Systematic root-cause analysis: reproduce, gather evidence, hypothesize, test, fix, document. No shotgun debugging, no random patches |
+| **Code Review** | Structured review covering correctness, security, maintainability, and performance. Critical issues first, nitpicks last, every criticism includes a fix |
+| **Architecture Decision** | ADR process for technical choices: frame the decision, evaluate max 3 options, recommend with explicit tradeoffs, document for future developers |
+| **Context Management** | Context window hygiene: progressive loading, bloat detection, memory updates at breakpoints. Keeps Claude sharp across long sessions |
+| **Tool Integration** | MCP server and external API connection workflow: define, design, implement, test, document. Includes MCP server checklist and anti-patterns |
 | **Proposal Writing** | Problem-first structure: client's pain in their language, specific approach, concrete deliverables, clear next step. No filler, no jargon |
 
 ### Memory -- Persistent State
@@ -108,8 +133,28 @@ The template includes guidance on what to store (decisions that would be expensi
 
 ## The Full System
 
-This starter kit covers the fundamentals. The system it was extracted from includes 40+ custom skills, 200+ lines of battle-tested CLAUDE.md rules, multi-project memory architecture, custom MCP server orchestration, automated verification protocols, and adversarial review modes -- all running production client work daily.
+This starter kit covers the fundamentals. The system it was extracted from runs production work daily with:
 
-If you want a Claude Code environment custom-built for your team's codebase and workflow -- or need AI workflow automation (n8n, Claude API, Python pipelines) -- I build these systems:
+- 40+ custom skills with automatic activation triggers
+- 200+ lines of battle-tested CLAUDE.md rules
+- Multi-project memory architecture with cross-session persistence
+- Custom MCP server orchestration (Notion, Google Drive, browser automation, and more)
+- Automated verification protocols that catch bugs before they ship
+- Dual-AI adversarial review (Claude builds, a second model attacks blind spots)
 
-**Martin Garramon** -- [LinkedIn](https://linkedin.com/in/martin-garramon) | martin@yulicreative.ai
+---
+
+## Want This Built For Your Codebase?
+
+I build custom Claude Code environments for developers and teams. Three options:
+
+| Package | What You Get | Price |
+|---------|-------------|-------|
+| **AI Workflow Audit** | 25-min Loom analyzing your current setup + action plan | $150 |
+| **Claude Code Blueprint** | Custom CLAUDE.md + 2 skills + memory system + docs | $500 |
+| **MCP Integration** | Custom MCP server + 3 skills + full environment + 10-day delivery | $1,500 |
+
+Or reach out for a full AI Operating System build ($3,500+) if you need the complete architecture.
+
+**Martin Garramon** -- AI Systems Architect
+[LinkedIn](https://linkedin.com/in/martin-garramon) | martin@yulicreative.ai | [yulicreative.ai](https://yulicreative.ai)
