@@ -167,15 +167,9 @@ This starter kit covers the fundamentals. The system it was extracted from runs 
 
 ## Want This Built For Your Codebase?
 
-I build custom Claude Code environments for developers and teams. Three options:
+This kit is the starting point. The system it was extracted from runs 40+ custom skills, multi-project memory, MCP server orchestration, and automated verification across production work daily.
 
-| Package | What You Get | Price |
-|---------|-------------|-------|
-| **AI Workflow Audit** | 25-min Loom analyzing your current setup + action plan | $150 |
-| **Claude Code Blueprint** | Custom CLAUDE.md + 2 skills + memory system + docs | $500 |
-| **MCP Integration** | Custom MCP server + 3 skills + full environment + 10-day delivery | $1,500 |
-
-Or reach out for a full AI Operating System build ($3,500+) if you need the complete architecture.
+If you want a custom Claude Code environment built for your team's stack and workflows, reach out -- I do this as a service.
 
 **Martin Garramon** -- AI Systems Architect
 [LinkedIn](https://linkedin.com/in/martin-garramon) | martin@yulicreative.ai | [yulicreative.ai](https://yulicreative.ai)
