@@ -1,175 +1,188 @@
+<div align="center">
+
 # Claude Code Starter Kit
 
-**Stop re-explaining your project to Claude every session.**
+**Production-extracted architecture for Claude Code — stop losing context, stop repeating yourself, start shipping.**
 
-Most Claude Code setups are a single CLAUDE.md with a few vague lines. This kit gives you the architecture that emerges after months of daily production use: structured skills that trigger automatically, persistent memory that survives across sessions, and project rules that prevent Claude from making the same mistakes twice.
+[![MIT License](https://img.shields.io/github/license/martingarramon/claude-code-starter-kit?style=flat-square)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/martingarramon/claude-code-starter-kit?style=social)](https://github.com/martingarramon/claude-code-starter-kit/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/martingarramon/claude-code-starter-kit?style=social)](https://github.com/martingarramon/claude-code-starter-kit/network/members)
+[![Last Commit](https://img.shields.io/github/last-commit/martingarramon/claude-code-starter-kit?style=flat-square)](https://github.com/martingarramon/claude-code-starter-kit/commits/main)
 
-Drop it into your project. Customize it in 10 minutes. Watch Claude behave like a team member who's been onboarded.
+[Quick Start](#quick-start) · [Architecture](#architecture) · [Skills](#skills) · [Examples](#examples) · [Contributing](#contributing)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
----
-
-## What Changes
-
-| Without this | With this |
-|---|---|
-| Claude forgets context every session | Memory persists decisions, patterns, and status |
-| You re-explain your debugging process | A skill triggers automatically and follows your methodology |
-| Claude skips verification and says "it works" | A rule forces it to run code and show proof before claiming done |
-| Every task starts from zero | Claude reads your rules, skills, and memory before its first response |
+</div>
 
 ---
+
+## The Problem
+
+Claude Code is powerful, but without structure it:
+- Forgets your project rules every session
+- Skips verification and ships broken code
+- Wastes context window on things it already knows
+- Gives inconsistent results across sessions
+
+This starter kit fixes all of that.
+
+## What This Is
+
+A **3-layer configuration architecture** extracted from months of daily production use with Claude Code. Every rule exists because Claude got it wrong — not because it seemed like a good idea.
+
+```
+┌─────────────────────────────────────┐
+│           CLAUDE.md                 │  ← Constitution: runs every turn
+│   Rules, verification, planning     │
+├─────────────────────────────────────┤
+│           Skills/                   │  ← Specialists: activated on demand
+│   Debugging, code review, ADRs...  │
+├─────────────────────────────────────┤
+│           Memory/                   │  ← Persistence: survives sessions
+│   Decisions, patterns, commands     │
+└─────────────────────────────────────┘
+```
+
+## Who Is This For
+
+- **Solo developers** using Claude Code who want consistent, reliable results
+- **Teams** standardizing how Claude Code behaves across projects
+- **Power users** who've hit the limits of ad-hoc prompting and want structure
+- **Anyone migrating from Cursor/Copilot** who wants to replicate their rules in Claude Code
+
+Not for: building Claude API applications (use the SDK for that). This is for configuring the Claude Code CLI itself.
 
 ## Quick Start
 
 ```bash
 git clone https://github.com/martingarramon/claude-code-starter-kit.git
 cd claude-code-starter-kit
-chmod +x setup.sh
-./setup.sh /path/to/your/project
+chmod +x setup.sh && ./setup.sh
 ```
 
-Or just copy the files manually -- there is no magic here, only structure.
-
----
+That's it. The setup script creates the directory structure and copies templates. Non-destructive — won't overwrite existing files.
 
 ## Architecture
 
-Claude Code reads instructions from three layers. This kit gives you a working version of each.
+### Layer 1: CLAUDE.md — The Constitution
 
-```mermaid
-graph TD
-    A["CLAUDE.md<br/><i>Constitution — runs every turn</i>"] --> B["Skills/<br/><i>Specialist workflows — activate on demand</i>"]
-    A --> C["Memory/<br/><i>Persistent state — survives across sessions</i>"]
-    A --> L["Examples/<br/><i>Working templates and code</i>"]
-    B --> D["research/"]
-    B --> E["debugging/"]
-    B --> F["code-review/"]
-    B --> G["architecture-decision/"]
-    B --> H["context-management/"]
-    B --> I["tool-integration/"]
-    B --> J["proposal-writing/"]
-    C --> K["MEMORY.md<br/><i>Status, decisions, patterns</i>"]
-    L --> M["mcp-server/"]
-    L --> N["claude-md-templates/"]
-    L --> O["hooks/"]
+The `CLAUDE.md` file runs on every Claude Code interaction. It contains:
 
-    style A fill:#1a1a2e,stroke:#e94560,color:#fff
-    style B fill:#1a1a2e,stroke:#0f3460,color:#fff
-    style C fill:#1a1a2e,stroke:#0f3460,color:#fff
-    style L fill:#1a1a2e,stroke:#0f3460,color:#fff
-```
+- **Verification rules** — "Run before claiming done. State the method first."
+- **Planning rules** — "3+ files = plan mode. No guessing."
+- **Code quality rules** — "No placeholders. Prefer editing existing files."
+- **Communication rules** — "One step at a time. Lead with problems."
+- **Environment config** — Shell, OS, paths, tools
+- **Context hygiene** — When to compact, what to load
 
-```
-your-project/
-  CLAUDE.md                          # The constitution -- runs every turn
-  memory/
-    MEMORY.md                        # Persistent brain -- decisions, status, patterns
-  skills/
-    research/SKILL.md                # Multi-source research with recommendations
-    debugging/SKILL.md               # Systematic root-cause analysis
-    code-review/SKILL.md             # Security, quality, maintainability review
-    architecture-decision/SKILL.md   # ADR process for technical choices
-    context-management/SKILL.md      # Context window hygiene and memory updates
-    tool-integration/SKILL.md        # MCP servers and external API connections
-    proposal-writing/SKILL.md        # Client proposals and project pitches
-  .claude/
-    settings.json                    # Permission configuration
-  examples/
-    mcp-server/                      # Working MCP server (project notes store)
-    claude-md-templates/             # CLAUDE.md for SaaS, Python API, and more
-    hooks/                           # Session-start and post-tool-use hook examples
-```
+### Layer 2: Skills — Specialist Workflows
 
-**CLAUDE.md** tells Claude *how to behave*. It runs every turn, so keep it tight -- rules, not essays. This template includes MCP usage protocols, memory management rules, self-review loops, and context window hygiene -- all extracted from production use.
+Twelve battle-tested workflows that activate on demand:
 
-**Skills** tell Claude *how to do specific jobs*. They only activate when relevant, so they can be detailed without bloating every interaction.
+| Skill | What it does | When to use |
+|-------|-------------|-------------|
+| `debugging` | Systematic root-cause analysis | Anything breaks or behaves unexpectedly |
+| `code-review` | 5-step structured review | Before merging or after major changes |
+| `architecture-decision` | ADR process with max 3 options | Technical choices with tradeoffs |
+| `research` | Multi-source decomposition | Complex questions needing investigation |
+| `context-management` | Context window hygiene | Long sessions approaching limits |
+| `tool-integration` | MCP server workflow | Building or connecting external tools |
+| `proposal-writing` | Client-first structure | Scoping work for clients |
+| `testing` | AI-driven TDD strategy | Starting features, ensuring reliability |
+| `deployment` | CI/CD pipeline design | Setting up automated workflows |
+| `migration` | AI tool transition guide | Switching from Cursor/Copilot |
+| `performance` | Profiling and optimization | Slow code, bottlenecks |
+| `security-audit` | Proactive vulnerability scanning | Before deployments, periodic reviews |
 
-**Memory** tells Claude *what happened before*. Without it, every session starts from zero. With it, context compounds over time.
+### Layer 3: Memory — Persistent State
 
----
+The `memory/MEMORY.md` file persists across sessions:
+- Key decisions with rationale
+- Patterns learned from mistakes
+- Frequently used commands
+- Project status
 
-## What's Included
+### Supporting Infrastructure
 
-### CLAUDE.md -- Battle-Tested Rules
+- **Hooks** — Shell scripts that run at session start, after tool use, on errors
+- **Examples** — Stack-specific CLAUDE.md templates, MCP server reference
+- **Permissions** — `.claude/settings.json` with safe defaults (deny `rm -rf`, deny `force push`)
 
-The template includes rules that changed real behavior in production:
+## Examples
 
-- **"Verify before claiming done."** Without this, Claude confidently presents broken code. With it, the quality of output jumps immediately.
-- **"State the verification method first."** Forces Claude to think about testing before writing -- catches architectural mistakes early.
-- **"No guessing."** Prevents fabricated URLs, endpoints, and config values. Simple rule, massive impact.
-- **"One step at a time."** Stops Claude from dumping 15-step checklists. You get the next action, then the next.
+### Stack Templates
 
-### Skills -- Specialist Workflows
+Ready-to-use CLAUDE.md configurations for specific tech stacks:
 
-| Skill | What It Does |
-|-------|-------------|
-| **Research** | Decomposes questions into sub-queries, researches in parallel, synthesizes with confidence levels, and forms a specific recommendation -- not "it depends" |
-| **Debugging** | Systematic root-cause analysis: reproduce, gather evidence, hypothesize, test, fix, document. No shotgun debugging, no random patches |
-| **Code Review** | Structured review covering correctness, security, maintainability, and performance. Critical issues first, nitpicks last, every criticism includes a fix |
-| **Architecture Decision** | ADR process for technical choices: frame the decision, evaluate max 3 options, recommend with explicit tradeoffs, document for future developers |
-| **Context Management** | Context window hygiene: progressive loading, bloat detection, memory updates at breakpoints. Keeps Claude sharp across long sessions |
-| **Tool Integration** | MCP server and external API connection workflow: define, design, implement, test, document. Includes MCP server checklist and anti-patterns |
-| **Proposal Writing** | Problem-first structure: client's pain in their language, specific approach, concrete deliverables, clear next step. No filler, no jargon |
+| Template | Stack |
+|----------|-------|
+| `python-api.md` | FastAPI + SQLAlchemy + PostgreSQL |
+| `saas-webapp.md` | Next.js 14 + Prisma + PostgreSQL |
+| `nodejs-typescript-api.md` | Express/NestJS + TypeScript + PostgreSQL |
+| `react-frontend.md` | React + Vite + TypeScript |
+| `go-microservice.md` | Go + Gin + Redis |
+| `data-science.md` | Python + Jupyter + Pandas + scikit-learn |
+| `serverless.md` | AWS Lambda + SAM + Python/Node.js |
 
-### Memory -- Persistent State
+### Hook Examples
 
-Sections for project status, key decisions, patterns learned, and frequently used commands. Claude updates this during sessions and reads it at the start of the next one.
+| Hook | Type | Purpose |
+|------|------|---------|
+| `session-start.sh` | Session Start | Git status, last commit, memory reminder |
+| `post-tool-use.sh` | PostToolUse | Error logging, last 50 entries |
+| `pre-tool-use-security.sh` | PreToolUse | Block dangerous commands before execution |
+| `notification-slack.sh` | Notification | Alert team on deployments or errors |
+| `session-stop-cleanup.sh` | Stop | Cleanup temp files, generate session summary |
+| `post-tool-use-autocorrect.sh` | PostToolUse | Auto-lint/format after file creation |
+| `subagent-performance.sh` | SubagentStop | Log sub-agent duration and outcomes |
 
-The template includes guidance on what to store (decisions that would be expensive to re-research) and what not to store (anything that belongs in code comments).
+### MCP Server
 
-### Examples
-
-Ready-to-use starting points:
-
-| Example | What It Is |
-|---------|-----------|
-| `examples/mcp-server/` | Minimal working MCP server in Python. Gives Claude persistent read/write access to a local notes store. Use as a template for your own MCP servers. |
-| `examples/claude-md-templates/saas-webapp.md` | CLAUDE.md for Next.js + Prisma + PostgreSQL projects. Rules for migrations, TypeScript strictness, and server component defaults. |
-| `examples/claude-md-templates/python-api.md` | CLAUDE.md for FastAPI + SQLAlchemy projects. Rules for async correctness, Alembic migrations, and dependency injection. |
-| `examples/hooks/session-start.sh` | Shell hook that runs at session start: shows git status and reminds Claude to read memory. |
-| `examples/hooks/post-tool-use.sh` | Shell hook that logs tool errors to `.claude/error-log.txt` for review. |
-
----
-
-## How to Customize
-
-**Start small.** Three to five rules in CLAUDE.md. Add one every time Claude does something you have to correct twice.
-
-**Skills are recipes.** Each SKILL.md follows a pattern: when to activate, the process, and the output format. Write new skills for any workflow where you find yourself re-explaining the same process.
-
-**Memory is state, not documentation.** Store decisions, status, and patterns. Delete anything stale at the start of each session.
-
----
+A working reference implementation (140 lines, Python) for building your own MCP tools. Includes a 5-minute setup guide.
 
 ## Design Principles
 
-- **Rules come from mistakes.** Don't pre-optimize. Add rules when Claude gets something wrong.
-- **Skills are specialists, not essays.** Each skill does one job. Keep them focused.
-- **Memory is for state, not documentation.** Store decisions and patterns, not prose.
-- **Less is more.** Claude reads CLAUDE.md every turn. Every unnecessary line costs attention.
+1. **Rules from mistakes, not pre-optimization** — Every rule exists because Claude got it wrong
+2. **Progressive context loading** — Load what you need, when you need it
+3. **Skills over prompts** — Structured workflows beat ad-hoc instructions
+4. **Verification before completion** — Always run it, never assume it works
+5. **Memory is cheap, context is expensive** — Persist decisions, load on demand
 
----
+## Comparison
 
-## The Full System
+| Feature | This Kit | Bare Claude Code | .cursorrules | Ad-hoc Prompts |
+|---------|----------|-----------------|--------------|----------------|
+| Persistent rules | CLAUDE.md constitution | None | Rules file | Copy-paste each time |
+| Specialist workflows | 12 battle-tested skills | Manual each time | Community rules | Reinvent every session |
+| Cross-session memory | MEMORY.md system | None | None | None |
+| Verification protocol | Built-in rules | Hope for the best | Varies | None |
+| Hook automation | 7 hook examples (all API types) | Manual setup | N/A | N/A |
+| Stack templates | 7 ready-to-use | Start from scratch | Some available | N/A |
+| MCP server reference | Working example | Docs only | N/A | N/A |
 
-This starter kit covers the fundamentals. The system it was extracted from runs production work daily with:
+## Roadmap
 
-- 40+ custom skills with automatic activation triggers
-- 200+ lines of battle-tested CLAUDE.md rules
-- Multi-project memory architecture with cross-session persistence
-- Custom MCP server orchestration (Notion, Google Drive, browser automation, and more)
-- Automated verification protocols that catch bugs before they ship
-- Dual-AI adversarial review (Claude builds, a second model attacks blind spots)
+- [x] ~~More stack templates~~ — 7 templates covering Node.js, React, Go, Python, serverless
+- [x] ~~More hook examples~~ — 7 hooks covering all Claude Code API types
+- [x] ~~Additional skills~~ — 12 skills including testing, deployment, migration, performance, security
+- [ ] Community skill directory (share and discover skills)
+- [ ] Self-learning patterns (auto-improve CLAUDE.md from outcomes)
+- [ ] MCP ecosystem browser (discover community MCP servers)
+- [ ] Team collaboration guide
 
----
+## Contributing
 
-## Want This Built For Your Codebase?
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. We welcome:
+- New skills and stack templates
+- Hook examples for different workflows
+- Bug reports and improvements
+- Documentation fixes
 
-This kit is the starting point. The system it was extracted from runs 40+ custom skills, multi-project memory, MCP server orchestration, and automated verification across production work daily.
+## License
 
-If you want a custom Claude Code environment built for your team's stack and workflows, reach out -- I do this as a service.
+MIT — see [LICENSE](LICENSE).
 
-**Martin Garramon** -- AI Systems Architect
-[LinkedIn](https://linkedin.com/in/martin-garramon) | martin@yulicreative.ai | [yulicreative.ai](https://yulicreative.ai)
+## Built By
+
+[Martin Garramon](https://github.com/martingarramon) at [Yuli Creative](https://yulicreative.ai) — AI automation consulting for dev teams and SaaS founders.
+
+Need a custom Claude Code setup for your team? [Get in touch](https://yulicreative.ai).
