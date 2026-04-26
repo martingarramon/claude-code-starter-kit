@@ -15,6 +15,15 @@
 
 ---
 
+> **State of the art — this is a V1 snapshot from March 2026.** The patterns below still work as a starting point, and the philosophy ("rules from mistakes, not pre-optimization") still drives my live system. What's evolved since:
+> - **Domain specialization.** A single CLAUDE.md is fine for general use, but a real working system specializes — mine focuses on agentic AI and business-automation pipelines, with skills and references partitioned by domain.
+> - **Three-layer pattern by refresh cadence.** CLAUDE.md (spec — monthly), `SKILL.md` (brain — rarely), `memory/project_*.md` (state — every session). Each fact lives in exactly one layer. The repo's flat 3-layer model is a good entry point; this is the next step.
+> - **Multi-AI orchestration.** A coordinator skill that routes work across Claude, Codex, Grok, and Gemini, with per-territory dispatch and a connection registry.
+>
+> If you want the current state of the art, see [yulicreative.ai](https://yulicreative.ai).
+
+---
+
 ## The Problem
 
 Claude Code is powerful, but without structure it:
@@ -183,6 +192,6 @@ MIT — see [LICENSE](LICENSE).
 
 ## Built By
 
-[Martin Garramon](https://github.com/martingarramon) at [Yuli Creative](https://yulicreative.ai) — AI automation consulting for dev teams and SaaS founders.
+[Martin Garramon](https://github.com/martingarramon) at [Yuli Creative](https://yulicreative.ai) — agentic AI systems and business-automation pipelines.
 
-Need a custom Claude Code setup for your team? [Get in touch](https://yulicreative.ai).
+Need a custom Claude Code setup or a system architect's review of yours? [Get in touch](https://yulicreative.ai).
